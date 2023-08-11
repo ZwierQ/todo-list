@@ -1,0 +1,73 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+#content {
+  height: 100vh;
+  background-color: #1d1d1d;
+  color: #d6d6d6;
+  display: grid;
+  grid-template: 100px auto / 1fr 5fr;
+  grid-template-areas:
+    "heading heading"
+    "sidebar todos";
+}
+
+.heading {
+  grid-area: heading;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background-color: #303030;
+  font-size: 2.7rem;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+}
+
+.todo-form {
+  grid-area: sidebar;
+  background-color: #303030;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.todo-description {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo-due-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo-importance {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+}
