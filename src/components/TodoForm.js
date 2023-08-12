@@ -3,6 +3,13 @@ const TodoForm = (parentElement) => {
   todoForm.classList.add("todo-form");
 
   todoForm.innerHTML = `
+    <div class="todo-lists">
+      <label for="todo-projects">List Name</label>
+      <select name="todo-projects" id="todo-lists">
+        <option value="Default List" >Default List</option>
+        <option value="Second List" >Second List</option>
+      </select>
+    </div>
     <div class="todo-description">
       <label for="todo-description">To-do</label>
       <input type="text" id="todo-description">
@@ -19,6 +26,7 @@ const TodoForm = (parentElement) => {
       </select>
     </div>
     <button class="todo-add">Add To-Do</button>
+    
   `;
 
   parentElement.appendChild(todoForm);

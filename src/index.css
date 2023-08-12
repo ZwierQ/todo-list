@@ -40,23 +40,13 @@
   padding: 20px;
 }
 
-.todo-description {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.todo-due-date {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
+.todo-lists,
+.todo-description,
+.todo-due-date,
 .todo-importance {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 15px;
 }
 
 .todo-list {
@@ -70,4 +60,15 @@
   align-items: center;
   justify-content: space-around;
   padding: 5px;
+}
+
+.todo-delete {
+  background: none;
+  outline: none;
+  border: none;
+}
+
+.close-icon {
+  width: 25px;
+  height: auto;
 }
