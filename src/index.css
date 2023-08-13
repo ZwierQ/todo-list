@@ -36,14 +36,24 @@
   background-color: #303030;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
   padding: 20px;
+}
+
+.select-list,
+.create-todo,
+.create-list,
+.delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .todo-lists,
 .todo-description,
 .todo-due-date,
-.todo-importance {
+.todo-importance,
+.list-name {
   display: flex;
   align-items: center;
   justify-content: space-between;

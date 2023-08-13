@@ -1,19 +1,18 @@
 import Todo from "./Todo";
 
 const TodosController = () => {
-  let todosLists = [
-    { name: "Default List", todos: [] },
-    { name: "Second List", todos: [] },
-  ];
+  let todosLists = [{ name: "Default List", todos: [] }];
+
+  const getList = () => todosLists;
 
   const addList = (name) => {
     todosLists.push({ name: name, todos: [] });
   };
 
   const deleteList = (listIndex) => {
-    todosLists = todosLists.filter((list) => {
-      todosLists.indexOf(list) !== parseInt(listIndex);
-    });
+    todosLists = todosLists.filter(
+      (list) => todosLists.indexOf(list) !== parseInt(listIndex)
+    );
   };
 
   const getTodos = (listIndex) => todosLists[listIndex].todos;
@@ -29,7 +28,7 @@ const TodosController = () => {
     );
   };
 
-  return { addList, deleteList, getTodos, addTodo, deleteTodo };
+  return { getList, addList, deleteList, getTodos, addTodo, deleteTodo };
 };
 
 export default TodosController;
