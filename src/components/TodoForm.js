@@ -14,7 +14,7 @@ const TodoForm = (parentElement) => {
     <div class="create-todo">
       <h2>Create New To-Do</h2>
       <div class="todo-description">
-        <input type="text" id="todo-description" placeholder="Your Task Description">
+        <input type="text" id="todo-description" placeholder="Task Description">
       </div>
       <div class="todo-due-date">
         <label for="todo-due-date">Due Date</label>

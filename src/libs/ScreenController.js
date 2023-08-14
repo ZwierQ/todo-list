@@ -32,14 +32,15 @@ const ScreenController = () => {
         todo.state ? " checked" : ""
       }" id="${index}">
         <div class="description">${todo.description}</div>
-        <div>${formatDate(todo.dueDate)}</div>
-        <div>${todo.importance}</div>
-        <input type="checkbox" class="status" name="status" value="done" ${
-          todo.state ? "checked" : ""
-        }>
-        <button type="button" class="todo-delete">
-          <img src=${closeIcon} class="close-icon">
-        </button>
+        <div class="todo-info">
+          <div class="date">${formatDate(todo.dueDate)}</div>
+          <input type="checkbox" class="status" name="status" value="done" ${
+            todo.state ? "checked" : ""
+          }>
+          <button type="button" class="todo-delete">
+            <img src=${closeIcon} class="close-icon">
+          </button>
+        </div>
       </div>
       `;
     });
@@ -104,7 +105,7 @@ const ScreenController = () => {
   };
 
   const deleteTodo = (event) => {
-    const selectedTodoID = event.target.closest("div").id;
+    const selectedTodoID = event.target.closest(".todo").id;
     // deletes todo if we click close icon
     if (event.target.classList.contains("close-icon")) {
       todosController.deleteTodo(getCurrentList(), selectedTodoID);
@@ -114,7 +115,7 @@ const ScreenController = () => {
   };
 
   const changeTodoState = (event) => {
-    const todo = event.target.parentNode.id;
+    const todo = event.target.closest(".todo").id;
     // change status if we click checkbox
     if (event.target.classList.contains("status")) {
       todosController.changeTodoState(getCurrentList(), todo);

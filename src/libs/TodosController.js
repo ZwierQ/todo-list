@@ -7,7 +7,7 @@ const TodosController = () => {
       : [
           {
             name: "Default List",
-            todos: [new Todo("test", "low", "2023-08-15")],
+            todos: [],
           },
         ];
 
