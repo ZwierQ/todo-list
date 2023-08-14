@@ -6,7 +6,7 @@ const TodoForm = (parentElement) => {
     <div class="select-list">
       <h2>Select List</h2>
       <div class="todo-lists">
-        <label for="todo-projects">Select List</label>
+        <label for="todo-lists">List Name</label>
         <select name="todo-projects" id="todo-lists">
         </select>
       </div>
@@ -14,8 +14,7 @@ const TodoForm = (parentElement) => {
     <div class="create-todo">
       <h2>Create New To-Do</h2>
       <div class="todo-description">
-        <label for="todo-description">To-do</label>
-        <input type="text" id="todo-description">
+        <input type="text" id="todo-description" placeholder="Your Task Description">
       </div>
       <div class="todo-due-date">
         <label for="todo-due-date">Due Date</label>
@@ -25,6 +24,7 @@ const TodoForm = (parentElement) => {
         <label for="todo-importance">Importance</label>
         <select name="todo-importance" id="todo-importance">
           <option value="low">Low</option>
+          <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
       </div>
@@ -33,8 +33,7 @@ const TodoForm = (parentElement) => {
     <div class="create-list">
       <h2>Create New List</h2>
       <div class="list-name">
-        <label for="create-list">List Name</label>
-        <input type="text" id="create-list">
+        <input type="text" id="create-list" placeholder="List Name">
       </div>
       <button class="add-list" type="button">Create List</button>
     </div>

@@ -4,9 +4,34 @@
   font-family: sans-serif;
 }
 
+body {
+  background-color: #1d1d1d;
+}
+
+.todo-form input {
+  width: 100%;
+  padding: 2px 10px;
+}
+
+button {
+  padding: 5px;
+  background-color: #1d1d1d;
+  color: #d6d6d6;
+  border: none;
+}
+
+button:active {
+  transform: scale(1.02);
+}
+
+input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #ffa600;
+}
+
 #content {
   height: 100vh;
-  background-color: #1d1d1d;
   color: #d6d6d6;
   display: grid;
   grid-template: 100px auto / 1fr 5fr;
@@ -55,24 +80,58 @@
 .todo-importance,
 .list-name {
   display: flex;
+  gap: 10px;
   align-items: center;
   justify-content: space-between;
+  white-space: nowrap;
 }
 
 .todo-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin: 15px;
 }
 
 .todo {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  background-color: #303030;
   padding: 5px;
+  border-radius: 8px;
+
+  & .description {
+    flex: 4;
+  }
+  & div,
+  /* & input, */
+  & button {
+    flex: 1;
+    padding: 8px;
+  }
+}
+
+.low {
+  border-left: 8px solid rgb(255, 251, 0);
+}
+
+.medium {
+  border-left: 8px solid #ffa600;
+}
+
+.high {
+  border-left: 8px solid #ff0000;
+}
+
+.checked {
+  border-left: 8px solid green;
 }
 
 .todo-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   outline: none;
   border: none;
@@ -81,4 +140,5 @@
 .close-icon {
   width: 25px;
   height: auto;
+  cursor: pointer;
 }

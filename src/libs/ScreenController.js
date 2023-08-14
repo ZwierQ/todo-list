@@ -23,16 +23,23 @@ const ScreenController = () => {
   const displayTodos = (list) => {
     todoList.innerHTML = "";
 
+    // If list array is empty return without render todos
+    if (getCurrentList() === -1) return;
+
     list.forEach((todo, index) => {
       todoList.innerHTML += `
-      <div class="todo" id="${index}">
-      <div>${todo.description}</div>
-      <div>${formatDate(todo.dueDate)}</div>
-      <div>${todo.importance}</div>
-      <input type="checkbox" id="status" name="status" value="done">
-      <button type="button" class="todo-delete">
-      <img src=${closeIcon} class="close-icon">
-      </button>
+      <div class="todo ${todo.importance}${
+        todo.state ? " checked" : ""
+      }" id="${index}">
+        <div class="description">${todo.description}</div>
+        <div>${formatDate(todo.dueDate)}</div>
+        <div>${todo.importance}</div>
+        <input type="checkbox" class="status" name="status" value="done" ${
+          todo.state ? "checked" : ""
+        }>
+        <button type="button" class="todo-delete">
+          <img src=${closeIcon} class="close-icon">
+        </button>
       </div>
       `;
     });
@@ -52,20 +59,30 @@ const ScreenController = () => {
 
   const addList = () => {
     const newListNameValue = newListName.value;
-    const newListIndex = todosController.getList().length;
+    const existingLists = todosController.getList();
+    const newListIndex = existingLists.length;
 
+    // If new list name is empty return without adding list
     if (newListNameValue === "") return;
+
+    // If new name is not unique return without adding list
+    if (
+      existingLists.findIndex((list) => list.name === newListNameValue) !== -1
+    )
+      return;
 
     todosController.addList(newListNameValue);
     renderListsOptions();
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
+    todosController.storeList();
   };
 
   const deleteList = () => {
     todosController.deleteList(getCurrentList());
     renderListsOptions();
     displayTodos(getListToRender());
+    todosController.storeList();
   };
 
   const addTodo = () => {
@@ -73,6 +90,7 @@ const ScreenController = () => {
     const todoImportanceValue = todoImportance.value;
     const todoDueDateValue = todoDueDate.value;
 
+    // If todos description or due date are empty return without adding todo
     if (todoDescriptionValue === "" || todoDueDateValue === "") return;
 
     todosController.addTodo(
@@ -81,34 +99,42 @@ const ScreenController = () => {
       todoImportanceValue,
       todoDueDateValue
     );
-
     displayTodos(getListToRender());
+    todosController.storeList();
   };
 
   const deleteTodo = (event) => {
-    if (
-      event.target.classList.contains("todo-delete") ||
-      event.target.parentElement.classList.contains("todo-delete")
-    ) {
-      const selectedTodoID = event.target.closest("div").id;
-
+    const selectedTodoID = event.target.closest("div").id;
+    // deletes todo if we click close icon
+    if (event.target.classList.contains("close-icon")) {
       todosController.deleteTodo(getCurrentList(), selectedTodoID);
+      displayTodos(getListToRender());
+      todosController.storeList();
+    }
+  };
+
+  const changeTodoState = (event) => {
+    const todo = event.target.parentNode.id;
+    // change status if we click checkbox
+    if (event.target.classList.contains("status")) {
+      todosController.changeTodoState(getCurrentList(), todo);
+      todosController.storeList();
       displayTodos(getListToRender());
     }
   };
 
   todoLists.addEventListener("change", () => displayTodos(getListToRender()));
-
   addTodoButton.addEventListener("click", () => addTodo());
-
-  todoList.addEventListener("click", (event) => deleteTodo(event));
-
+  todoList.addEventListener("click", (event) => {
+    deleteTodo(event), changeTodoState(event);
+  });
   addListButton.addEventListener("click", () => addList());
-
   deleteListButton.addEventListener("click", () => deleteList());
 
-  // Initial List Options selector render
+  // Initial Lists Options selector render
   renderListsOptions();
+  // Initial Todos render
+  displayTodos(getListToRender());
 };
 
 export default ScreenController;

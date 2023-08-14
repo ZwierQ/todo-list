@@ -1,7 +1,20 @@
 import Todo from "./Todo";
 
 const TodosController = () => {
-  let todosLists = [{ name: "Default List", todos: [] }];
+  let todosLists =
+    localStorage.getItem("myList") !== null
+      ? JSON.parse(localStorage.getItem("myList"))
+      : [
+          {
+            name: "Default List",
+            todos: [new Todo("test", "low", "2023-08-15")],
+          },
+        ];
+
+  const storeList = () => {
+    const storedList = JSON.stringify(todosLists);
+    localStorage.setItem("myList", storedList);
+  };
 
   const getList = () => todosLists;
 
@@ -15,7 +28,9 @@ const TodosController = () => {
     );
   };
 
-  const getTodos = (listIndex) => todosLists[listIndex].todos;
+  const getTodos = (listIndex) =>
+    // getTodos if array is not empty
+    listIndex !== -1 && todosLists[listIndex].todos;
 
   const addTodo = (listIndex, description, importance, dueDate) => {
     const todo = new Todo(description, importance, dueDate);
@@ -28,7 +43,21 @@ const TodosController = () => {
     );
   };
 
-  return { getList, addList, deleteList, getTodos, addTodo, deleteTodo };
+  const changeTodoState = (listIndex, todo) => {
+    todosLists[listIndex].todos[todo].state =
+      !todosLists[listIndex].todos[todo].state;
+  };
+
+  return {
+    storeList,
+    getList,
+    addList,
+    deleteList,
+    getTodos,
+    addTodo,
+    deleteTodo,
+    changeTodoState,
+  };
 };
 
 export default TodosController;
