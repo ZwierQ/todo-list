@@ -71,20 +71,29 @@ const ScreenController = () => {
     const existingLists = todosController.getList();
     const newListIndex = existingLists.length;
 
-    // If new list name is empty return without adding list
-    if (newListNameValue === "") return;
+    // If new list name is empty or new name is not unique return without adding list
+    if (newListNameValue === "") {
+      newListName.classList.add("error");
+      newListName.placeholder = "Please type List Name";
+      return;
+    }
 
-    // If new name is not unique return without adding list
     if (
       existingLists.findIndex((list) => list.name === newListNameValue) !== -1
-    )
+    ) {
+      newListName.classList.add("error");
+      newListName.value = "";
+      newListName.placeholder = "List already exist";
       return;
+    }
 
     todosController.addList(newListNameValue);
     renderListsOptions();
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
     newListName.value = "";
+    newListName.classList.remove("error");
+    newListName.placeholder = "List Name";
   };
 
   const deleteList = () => {
@@ -96,7 +105,11 @@ const ScreenController = () => {
 
   const addTodo = () => {
     // If todos description or due date are empty return without adding todo
-    if (todoDescription.value === "") return;
+    if (todoDescription.value === "") {
+      todoDescription.classList.add("error");
+      todoDescription.placeholder = "What you want to do?";
+      return;
+    }
 
     todosController.addTodo(
       getCurrentList(),
@@ -108,6 +121,8 @@ const ScreenController = () => {
     todoDescription.value = "";
     todoDueDate.value = getMinDate();
     todoImportance.selectedIndex = 0;
+    todoDescription.classList.remove("error");
+    todoDescription.placeholder = "Task Description";
   };
 
   const deleteTodo = (event) => {
