@@ -2,7 +2,10 @@ import { getMinDate } from "../libs/getMinDate";
 
 const TodoForm = (parentElement) => {
   const todoForm = document.createElement("div");
+  const displayForm = document.createElement("button");
+
   todoForm.classList.add("todo-form");
+  displayForm.classList.add("display-form");
 
   todoForm.innerHTML = `
     <div class="select-list">
@@ -45,7 +48,9 @@ const TodoForm = (parentElement) => {
     </div>
   `;
 
+  displayForm.textContent = "Show/hide";
   parentElement.appendChild(todoForm);
+  parentElement.appendChild(displayForm);
 };
 
 export default TodoForm;

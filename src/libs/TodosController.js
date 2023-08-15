@@ -1,15 +1,17 @@
 import Todo from "./Todo";
 
 const TodosController = () => {
+  const defaultValue = [
+    {
+      name: "My List",
+      todos: [],
+    },
+  ];
+
   let todosLists =
     localStorage.getItem("myList") !== null
       ? JSON.parse(localStorage.getItem("myList"))
-      : [
-          {
-            name: "Default List",
-            todos: [],
-          },
-        ];
+      : defaultValue;
 
   const storeList = () => {
     const storedList = JSON.stringify(todosLists);
@@ -20,12 +22,19 @@ const TodosController = () => {
 
   const addList = (name) => {
     todosLists.push({ name: name, todos: [] });
+    storeList();
   };
 
   const deleteList = (listIndex) => {
     todosLists = todosLists.filter(
       (list) => todosLists.indexOf(list) !== parseInt(listIndex)
     );
+
+    if (todosLists.length === 0) {
+      localStorage.clear();
+      todosLists = defaultValue;
+    }
+    storeList();
   };
 
   const getTodos = (listIndex) =>
@@ -35,21 +44,23 @@ const TodosController = () => {
   const addTodo = (listIndex, description, importance, dueDate) => {
     const todo = new Todo(description, importance, dueDate);
     todosLists[listIndex].todos.push(todo);
+    storeList();
   };
 
   const deleteTodo = (listIndex, todoID) => {
     todosLists[listIndex].todos = todosLists[listIndex].todos.filter(
       (item) => todosLists[listIndex].todos.indexOf(item) !== parseInt(todoID)
     );
+    storeList();
   };
 
   const changeTodoState = (listIndex, todo) => {
     todosLists[listIndex].todos[todo].state =
       !todosLists[listIndex].todos[todo].state;
+    storeList();
   };
 
   return {
-    storeList,
     getList,
     addList,
     deleteList,

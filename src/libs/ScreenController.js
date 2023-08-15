@@ -17,6 +17,8 @@ const ScreenController = () => {
   const modal = document.getElementById("modal");
   const confirmListDelete = document.querySelector(".confirm");
   const cancelListDelete = document.querySelector(".cancel");
+  const displayForm = document.querySelector(".display-form");
+  const todoForm = document.querySelector(".todo-form");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
@@ -25,7 +27,9 @@ const ScreenController = () => {
     date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3-$2-$1");
 
   const displayTodos = (list) => {
-    todoList.innerHTML = "";
+    todoList.innerHTML = `<h1>${
+      todosController.getList()[getCurrentList()].name
+    }</h1>`;
 
     // If list array is empty return without render todos
     if (getCurrentList() === -1) return;
@@ -80,16 +84,14 @@ const ScreenController = () => {
     renderListsOptions();
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
-    todosController.storeList();
     newListName.value = "";
   };
 
   const deleteList = () => {
+    modal.close();
     todosController.deleteList(getCurrentList());
     renderListsOptions();
     displayTodos(getListToRender());
-    todosController.storeList();
-    modal.close();
   };
 
   const addTodo = () => {
@@ -103,29 +105,37 @@ const ScreenController = () => {
       todoDueDate.value
     );
     displayTodos(getListToRender());
-    todosController.storeList();
     todoDescription.value = "";
     todoDueDate.value = getMinDate();
     todoImportance.selectedIndex = 0;
   };
 
   const deleteTodo = (event) => {
-    const selectedTodoID = event.target.closest(".todo").id;
     // deletes todo if we click close icon
     if (event.target.classList.contains("close-icon")) {
+      const selectedTodoID = event.target.closest(".todo").id;
+
       todosController.deleteTodo(getCurrentList(), selectedTodoID);
       displayTodos(getListToRender());
-      todosController.storeList();
     }
   };
 
   const changeTodoState = (event) => {
-    const todo = event.target.closest(".todo").id;
     // change status if we click checkbox
     if (event.target.classList.contains("status")) {
+      const todo = event.target.closest(".todo").id;
+
       todosController.changeTodoState(getCurrentList(), todo);
-      todosController.storeList();
       displayTodos(getListToRender());
+    }
+  };
+
+  const toggleFormVisibility = () => {
+    todoForm.classList.toggle("hidden");
+    if (todoForm.classList.contains("hidden")) {
+      displayForm.innerHTML = "Show Menu";
+    } else {
+      displayForm.innerHTML = "Hide Menu";
     }
   };
 
@@ -137,7 +147,8 @@ const ScreenController = () => {
   addListButton.addEventListener("click", () => addList());
   deleteListButton.addEventListener("click", () => modal.showModal());
   confirmListDelete.addEventListener("click", () => deleteList());
-  cancelListDelete.addEventListener("click", () => closeModal());
+  cancelListDelete.addEventListener("click", () => modal.close());
+  displayForm.addEventListener("click", () => toggleFormVisibility());
 
   // Initial Lists Options selector render
   renderListsOptions();

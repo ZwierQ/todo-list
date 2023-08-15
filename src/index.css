@@ -10,9 +10,23 @@ body {
   background-color: #1d1d1d;
 }
 
+#content {
+  height: 100vh;
+  color: #d6d6d6;
+  display: grid;
+  grid-template: 100px auto / 1fr 5fr;
+  grid-template-areas:
+    "heading heading"
+    "sidebar todos";
+}
+
 .todo-form input {
   width: 100%;
   padding: 2px 10px;
+}
+
+.display-form {
+  display: none;
 }
 
 dialog {
@@ -72,16 +86,6 @@ input[type="checkbox"] {
   height: 22px;
   accent-color: #ffa600;
   cursor: pointer;
-}
-
-#content {
-  height: 100vh;
-  color: #d6d6d6;
-  display: grid;
-  grid-template: 100px auto / 1fr 5fr;
-  grid-template-areas:
-    "heading heading"
-    "sidebar todos";
 }
 
 .heading {
@@ -192,4 +196,79 @@ input[type="checkbox"] {
   width: 25px;
   height: auto;
   cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  #content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 40px;
+    height: auto;
+  }
+
+  .todo-form {
+    display: grid;
+    grid-template-areas:
+      "createTodo selectList"
+      "createTodo createList"
+      "createTodo deleteList";
+  }
+
+  .create-todo {
+    grid-area: createTodo;
+  }
+
+  .select-list {
+    grid-area: selectList;
+  }
+
+  .create-list {
+    grid-area: createList;
+  }
+
+  .delete-list {
+    grid-area: deleteList;
+  }
+
+  .todo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .description {
+    width: 95%;
+    border-right: none;
+    border-bottom: #80808069 solid 1px;
+    padding: 10px;
+  }
+
+  .todo-info {
+    padding-bottom: 10px;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  .display-form {
+    display: block;
+    width: 100px;
+    background-color: #303030;
+    align-self: center;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  dialog {
+    max-width: 350px;
+  }
+
+  .hidden {
+    display: none;
+  }
 }
