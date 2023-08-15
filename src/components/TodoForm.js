@@ -5,6 +5,7 @@ const TodoForm = (parentElement) => {
   const displayForm = document.createElement("button");
 
   todoForm.classList.add("todo-form");
+  todoForm.classList.add("hidden");
   displayForm.classList.add("display-form");
 
   todoForm.innerHTML = `
@@ -48,7 +49,8 @@ const TodoForm = (parentElement) => {
     </div>
   `;
 
-  displayForm.textContent = "Show/hide";
+  displayForm.innerHTML = "Show Menu";
+
   parentElement.appendChild(todoForm);
   parentElement.appendChild(displayForm);
 };
