@@ -1,16 +1,58 @@
-* {
+body,
+input,
+h2 {
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
 }
 
 body {
+  font-family: sans-serif;
   background-color: #1d1d1d;
 }
 
 .todo-form input {
   width: 100%;
   padding: 2px 10px;
+}
+
+dialog {
+  border: solid 1px #80808069;
+  outline: none;
+  border-radius: 8px;
+  background-color: #303030;
+  color: #d6d6d6;
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(4px);
+}
+
+#modal {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+
+  & .confirm-buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+#modal:not([open]) {
+  display: none;
+}
+
+.confirm-delete {
+  padding: 20px;
+  font-size: 1.4rem;
+}
+
+.modal-button {
+  width: 150px;
+  padding: 12px;
+  outline: none;
+  font-size: 1rem;
+  border-radius: 8px;
 }
 
 button {

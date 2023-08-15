@@ -1,3 +1,5 @@
+import { getMinDate } from "../libs/getMinDate";
+
 const TodoForm = (parentElement) => {
   const todoForm = document.createElement("div");
   todoForm.classList.add("todo-form");
@@ -18,7 +20,7 @@ const TodoForm = (parentElement) => {
       </div>
       <div class="todo-due-date">
         <label for="todo-due-date">Due Date</label>
-        <input type="date" id="todo-due-date">
+        <input type="date" id="todo-due-date" value=${getMinDate()} min=${getMinDate()}>
       </div>
       <div class="todo-importance">
         <label for="todo-importance">Importance</label>

@@ -1,5 +1,6 @@
 import closeIcon from "../images/close-one.svg";
 import TodosController from "../libs/TodosController";
+import { getMinDate } from "./getMinDate";
 
 const ScreenController = () => {
   const todosController = TodosController();
@@ -13,6 +14,9 @@ const ScreenController = () => {
   const addListButton = document.querySelector(".add-list");
   const deleteListButton = document.querySelector(".list-delete");
   const newListName = document.getElementById("create-list");
+  const modal = document.getElementById("modal");
+  const confirmListDelete = document.querySelector(".confirm");
+  const cancelListDelete = document.querySelector(".cancel");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
@@ -77,6 +81,7 @@ const ScreenController = () => {
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
     todosController.storeList();
+    newListName.value = "";
   };
 
   const deleteList = () => {
@@ -84,24 +89,24 @@ const ScreenController = () => {
     renderListsOptions();
     displayTodos(getListToRender());
     todosController.storeList();
+    modal.close();
   };
 
   const addTodo = () => {
-    const todoDescriptionValue = todoDescription.value;
-    const todoImportanceValue = todoImportance.value;
-    const todoDueDateValue = todoDueDate.value;
-
     // If todos description or due date are empty return without adding todo
-    if (todoDescriptionValue === "" || todoDueDateValue === "") return;
+    if (todoDescription.value === "") return;
 
     todosController.addTodo(
       getCurrentList(),
-      todoDescriptionValue,
-      todoImportanceValue,
-      todoDueDateValue
+      todoDescription.value,
+      todoImportance.value,
+      todoDueDate.value
     );
     displayTodos(getListToRender());
     todosController.storeList();
+    todoDescription.value = "";
+    todoDueDate.value = getMinDate();
+    todoImportance.selectedIndex = 0;
   };
 
   const deleteTodo = (event) => {
@@ -130,7 +135,9 @@ const ScreenController = () => {
     deleteTodo(event), changeTodoState(event);
   });
   addListButton.addEventListener("click", () => addList());
-  deleteListButton.addEventListener("click", () => deleteList());
+  deleteListButton.addEventListener("click", () => modal.showModal());
+  confirmListDelete.addEventListener("click", () => deleteList());
+  cancelListDelete.addEventListener("click", () => closeModal());
 
   // Initial Lists Options selector render
   renderListsOptions();
