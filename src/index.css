@@ -216,9 +216,8 @@ input[type="checkbox"] {
   .todo-form {
     display: grid;
     grid-template-areas:
-      "createTodo selectList"
       "createTodo createList"
-      "createTodo deleteList";
+      "selectList deleteList";
   }
 
   .create-todo {
