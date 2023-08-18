@@ -17,8 +17,7 @@ const ScreenController = () => {
   const modal = document.getElementById("modal");
   const confirmListDelete = document.querySelector(".confirm");
   const cancelListDelete = document.querySelector(".cancel");
-  const displayForm = document.querySelector(".display-form");
-  const todoForm = document.querySelector(".todo-form");
+  const tabButtons = document.querySelectorAll(".mobile-menu__button");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
@@ -39,13 +38,13 @@ const ScreenController = () => {
       <div class="todo ${todo.importance}${
         todo.state ? " checked" : ""
       }" id="${index}">
-        <div class="description">${todo.description}</div>
-        <div class="todo-info">
-          <div class="date">${formatDate(todo.dueDate)}</div>
-          <input type="checkbox" class="status" name="status" value="done" ${
+        <div class="todo__description">${todo.description}</div>
+        <div class="todo__info">
+          <div class="todo__date">${formatDate(todo.dueDate)}</div>
+          <input type="checkbox" class="todo__status" name="status" value="done" ${
             todo.state ? "checked" : ""
           }>
-          <button type="button" class="todo-delete">
+          <button type="button" class="todo__delete-button">
             <img src=${closeIcon} class="close-icon">
           </button>
         </div>
@@ -137,7 +136,7 @@ const ScreenController = () => {
 
   const changeTodoState = (event) => {
     // change status if we click checkbox
-    if (event.target.classList.contains("status")) {
+    if (event.target.classList.contains("todo__status")) {
       const todo = event.target.closest(".todo").id;
 
       todosController.changeTodoState(getCurrentList(), todo);
@@ -145,13 +144,27 @@ const ScreenController = () => {
     }
   };
 
-  const toggleFormVisibility = () => {
-    todoForm.classList.toggle("hidden");
-    if (todoForm.classList.contains("hidden")) {
-      displayForm.innerHTML = "Show Menu";
-    } else {
-      displayForm.innerHTML = "Hide Menu";
-    }
+  const selectTab = (event) => {
+    const selectedTab = event.target.classList[0];
+    const tabElements = document.querySelectorAll(`.${selectedTab}`);
+
+    tabElements.forEach((item) => {
+      const itemClasses = item.classList;
+      // "selected" class toggle clicked tab
+      itemClasses.contains("selected")
+        ? itemClasses.remove("selected")
+        : itemClasses.add("selected");
+    });
+
+    tabButtons.forEach((button) => {
+      const buttonClass = button.classList[0];
+      // Removing "selected" class from other tabs
+      if (buttonClass !== selectedTab) {
+        const otherButtons = document.querySelectorAll(`.${buttonClass}`);
+
+        otherButtons.forEach((item) => item.classList.remove("selected"));
+      }
+    });
   };
 
   todoLists.addEventListener("change", () => displayTodos(getListToRender()));
@@ -163,7 +176,9 @@ const ScreenController = () => {
   deleteListButton.addEventListener("click", () => modal.showModal());
   confirmListDelete.addEventListener("click", () => deleteList());
   cancelListDelete.addEventListener("click", () => modal.close());
-  displayForm.addEventListener("click", () => toggleFormVisibility());
+  tabButtons.forEach((button) => {
+    button.addEventListener("click", (event) => selectTab(event));
+  });
 
   // Initial Lists Options selector render
   renderListsOptions();

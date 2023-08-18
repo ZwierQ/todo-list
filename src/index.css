@@ -21,14 +21,16 @@ body {
     "sidebar todos";
 }
 
+.todo-form select,
+.todo-form option,
 .todo-form input {
+  box-sizing: border-box;
   width: 100%;
+  height: 25px;
   padding: 2px 10px;
   outline: none;
-}
-
-.display-form {
-  display: none;
+  border: none;
+  border-radius: 5px;
 }
 
 dialog {
@@ -48,7 +50,7 @@ dialog::backdrop {
   flex-direction: column;
   gap: 50px;
 
-  & .confirm-buttons {
+  & .modal__buttons {
     display: flex;
     justify-content: space-around;
   }
@@ -58,28 +60,34 @@ dialog::backdrop {
   display: none;
 }
 
-.confirm-delete {
+.modal__heading {
   padding: 20px;
   font-size: 1.4rem;
 }
 
-.modal-button {
+.modal__button {
   width: 150px;
   padding: 12px;
+  border: none;
   outline: none;
+  background-color: #1d1d1d;
+  color: #d6d6d6;
   font-size: 1rem;
   border-radius: 8px;
 }
 
-button {
+.todo-form__button {
+  height: 30px;
   padding: 5px;
   background-color: #1d1d1d;
   color: #d6d6d6;
   border: none;
+  outline: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-button:active {
+.todo-form__button:active {
   transform: scale(1.02);
 }
 
@@ -125,9 +133,9 @@ input[type="checkbox"] {
 }
 
 .todo-lists,
-.todo-description,
-.todo-due-date,
-.todo-importance,
+.create-todo__description,
+.create-todo__due-date,
+.create-todo__importance,
 .list-name {
   display: flex;
   gap: 10px;
@@ -153,19 +161,25 @@ input[type="checkbox"] {
   background-color: #303030;
 }
 
-.todo-info {
+.todo__info {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.description {
+.todo__delete-button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+}
+
+.todo__description {
   padding: 5px;
   border-right: #80808069 solid 1px;
 }
 
-.date {
+.todo__date {
   white-space: nowrap;
 }
 
@@ -208,6 +222,10 @@ input[type="checkbox"] {
   color: rgba(255, 0, 0, 0.527);
 }
 
+.mobile-menu {
+  display: none;
+}
+
 @media screen and (max-width: 800px) {
   #content {
     display: flex;
@@ -216,6 +234,7 @@ input[type="checkbox"] {
 
   .heading {
     font-size: 1.5rem;
+    padding-bottom: 10px;
   }
 
   .logo {
@@ -224,30 +243,112 @@ input[type="checkbox"] {
   }
 
   .todo-form {
-    display: grid;
-    grid-template-areas:
-      "createTodo createList"
-      "selectList deleteList";
+    margin: 0;
+    padding: 0;
+    height: auto;
+    gap: 0;
   }
 
   .create-todo {
-    grid-area: createTodo;
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+    display: grid;
+    grid-template-areas:
+      "description description"
+      "date importance"
+      "button button";
+    gap: 15px;
+    transition: height 0.2s ease-in-out;
+  }
+
+  .create-todo.selected {
+    opacity: 100%;
+    padding: 0 20px 15px 20px;
+    height: 110px;
+    transition-property: height, opacity;
+    transition-duration: 0.2s, 0.8s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0, 0.3s;
+  }
+
+  .create-todo__description {
+    grid-area: description;
+  }
+
+  .create-todo__due-date {
+    grid-area: date;
+  }
+
+  .create-todo__importance {
+    grid-area: importance;
+  }
+
+  .todo-add {
+    grid-area: button;
   }
 
   .select-list {
-    grid-area: selectList;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.2s ease-in-out;
+  }
+
+  .select-list.selected {
+    opacity: 100%;
+    height: 25px;
+    padding: 0 20px 15px 20px;
+    transition-property: height, opacity;
+    transition-duration: 0.2s, 0.8s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0, 0.3s;
+  }
+
+  .todo-lists > label {
+    display: none;
   }
 
   .create-list {
-    grid-area: createList;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    display: flex;
+    gap: 12px;
+    transition: height 0.2s ease-in-out;
+  }
+
+  .create-list.selected {
+    opacity: 100%;
+    padding: 0 20px 15px 20px;
+    height: 67px;
+    transition-property: height, opacity;
+    transition-duration: 0.2s, 0.8s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0, 0.3s;
   }
 
   .delete-list {
-    grid-area: deleteList;
+    opacity: 0%;
+    height: 0;
+    overflow: hidden;
+    display: flex;
+    transition: height 0.2s ease-in-out;
+  }
+
+  .delete-list.selected {
+    opacity: 100%;
+    padding: 0 20px 15px 20px;
+    height: 30px;
+    gap: 0;
+    transition-property: height, opacity;
+    transition-duration: 0.2s, 0.8s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0, 0.3s;
   }
 
   .todo-list {
-    margin: 5px 25px 25px 25px;
+    margin: 25px;
   }
 
   .todo {
@@ -258,14 +359,14 @@ input[type="checkbox"] {
     padding: 0;
   }
 
-  .description {
+  .todo__description {
     border-right: none;
     border-bottom: #80808069 solid 1px;
     padding: 10px 0;
     margin: 0 15px;
   }
 
-  .todo-info {
+  .todo__info {
     width: inherit;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -273,36 +374,53 @@ input[type="checkbox"] {
     padding: 10px 15px;
   }
 
-  .status {
+  .todo__status {
     order: 1;
-    align-self: stretch;
+    align-self: center;
     margin-right: auto;
   }
 
-  .date {
+  .todo__date {
     order: 2;
   }
 
-  .todo-delete {
+  .todo__delete-button {
     padding: 0;
     order: 3;
   }
 
-  .display-form {
-    display: block;
-    width: 120px;
-    background-color: #303030;
-    align-self: center;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    padding: 5px;
+  .form-heading {
+    display: none;
   }
 
   dialog {
     max-width: 350px;
   }
 
-  .hidden {
-    display: none;
+  .mobile-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #303030;
+    padding-bottom: 10px;
+  }
+  .mobile-menu__button {
+    width: fit-content;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background-color: #303030;
+  }
+
+  .mobile-menu__icon {
+    width: 20px;
+    height: auto;
+  }
+
+  .mobile-menu__icon.selected {
+    filter: invert(30%) sepia(80%) saturate(774%) hue-rotate(354deg)
+      brightness(102%) contrast(98%);
   }
 }
