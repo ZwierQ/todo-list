@@ -173,29 +173,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input.error {
-  outline: solid 3px red;
-}
-
-.description-error-message,
-.add-list-error-message {
-  display: none;
-}
-
-.description-error-message.error,
-.add-list-error-message.error {
-  display: block;
-  position: absolute;
-  bottom: -9px;
-  left: 6px;
-  font-size: 0.7rem;
-  background-color: red;
-  color: white;
-  border-radius: 5px;
-  padding: 2px 5px;
-  margin: 0;
-}
-
 .menu {
   display: flex;
   align-items: center;
@@ -323,6 +300,29 @@ input.error {
   padding: 0 20px 15px 20px;
   height: auto;
   transition: opacity 0.3s ease-in-out;
+}
+
+input.error {
+  outline: solid 3px red;
+}
+
+.description-error-message,
+.add-list-error-message {
+  display: none;
+}
+
+.description-error-message.error,
+.add-list-error-message.error {
+  display: block;
+  position: absolute;
+  bottom: -9px;
+  left: 6px;
+  font-size: 0.7rem;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  margin: 0;
 }
 
 @media screen and (max-width: 800px) {

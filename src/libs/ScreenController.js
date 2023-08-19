@@ -47,12 +47,24 @@ const ScreenController = () => {
             todo.state ? "checked" : ""
           }>
           <button type="button" class="todo__delete-button">
-            <img src=${closeIcon} class="close-icon">
+          <img src=${closeIcon} class="close-icon">
           </button>
-        </div>
+          </div>
       </div>
       `;
     });
+  };
+
+  const deleteList = () => {
+    modal.close();
+    todosController.deleteList(getCurrentList());
+    renderListsOptions();
+    displayTodos(getListToRender());
+  };
+
+  const addError = (borderToChange, errorMessage) => {
+    borderToChange.classList.add("error");
+    errorMessage.classList.add("error");
   };
 
   const renderListsOptions = () => {
@@ -96,18 +108,6 @@ const ScreenController = () => {
     displayTodos(getListToRender());
     newListName.value = "";
     removeError(newListName, addListError);
-  };
-
-  const deleteList = () => {
-    modal.close();
-    todosController.deleteList(getCurrentList());
-    renderListsOptions();
-    displayTodos(getListToRender());
-  };
-
-  const addError = (borderToChange, errorMessage) => {
-    borderToChange.classList.add("error");
-    errorMessage.classList.add("error");
   };
 
   const removeError = (...args) => {
