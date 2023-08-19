@@ -7,17 +7,19 @@ const ScreenController = () => {
 
   const todoDescription = document.getElementById("todo-description");
   const todoDueDate = document.getElementById("todo-due-date");
-  const todoImportance = document.getElementById("todo-importance");
+  const todoPriority = document.getElementById("todo-priority");
   const addTodoButton = document.querySelector(".todo-add");
   const todoList = document.querySelector(".todo-list");
   const todoLists = document.getElementById("todo-lists");
+  const descriptionError = document.querySelector(".description-error-message");
   const addListButton = document.querySelector(".add-list");
+  const addListError = document.querySelector(".add-list-error-message");
   const deleteListButton = document.querySelector(".list-delete");
   const newListName = document.getElementById("create-list");
   const modal = document.getElementById("modal");
   const confirmListDelete = document.querySelector(".confirm");
   const cancelListDelete = document.querySelector(".cancel");
-  const tabButtons = document.querySelectorAll(".mobile-menu__button");
+  const tabButtons = document.querySelectorAll(".menu__button");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
@@ -70,19 +72,21 @@ const ScreenController = () => {
     const existingLists = todosController.getList();
     const newListIndex = existingLists.length;
 
-    // If new list name is empty or new name is not unique return without adding list
+    // If new list name is empty return without adding list
     if (newListNameValue === "") {
-      newListName.classList.add("error");
-      newListName.placeholder = "Please type List Name";
+      addError(newListName, addListError);
+      addListError.innerHTML = "Please Name Your List";
       return;
     }
 
+    // If new list name is not unique return without adding list
     if (
       existingLists.findIndex((list) => list.name === newListNameValue) !== -1
     ) {
-      newListName.classList.add("error");
+      addError(newListName, addListError);
+      addListError.innerHTML = "This List Name Already Exists";
+
       newListName.value = "";
-      newListName.placeholder = "List already exist";
       return;
     }
 
@@ -91,8 +95,7 @@ const ScreenController = () => {
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
     newListName.value = "";
-    newListName.classList.remove("error");
-    newListName.placeholder = "List Name";
+    removeError(newListName, addListError);
   };
 
   const deleteList = () => {
@@ -102,26 +105,35 @@ const ScreenController = () => {
     displayTodos(getListToRender());
   };
 
+  const addError = (borderToChange, errorMessage) => {
+    borderToChange.classList.add("error");
+    errorMessage.classList.add("error");
+  };
+
+  const removeError = (...args) => {
+    const displayedErrors = [...args];
+
+    displayedErrors.forEach((error) => error.classList.remove("error"));
+  };
+
   const addTodo = () => {
     // If todos description or due date are empty return without adding todo
     if (todoDescription.value === "") {
-      todoDescription.classList.add("error");
-      todoDescription.placeholder = "What you want to do?";
+      addError(todoDescription, descriptionError);
       return;
     }
 
     todosController.addTodo(
       getCurrentList(),
       todoDescription.value,
-      todoImportance.value,
+      todoPriority.value,
       todoDueDate.value
     );
     displayTodos(getListToRender());
     todoDescription.value = "";
     todoDueDate.value = getMinDate();
-    todoImportance.selectedIndex = 0;
-    todoDescription.classList.remove("error");
-    todoDescription.placeholder = "Task Description";
+    todoPriority.selectedIndex = 0;
+    removeError(todoDescription, descriptionError);
   };
 
   const deleteTodo = (event) => {
@@ -165,6 +177,8 @@ const ScreenController = () => {
         otherButtons.forEach((item) => item.classList.remove("selected"));
       }
     });
+
+    removeError(todoDescription, descriptionError, newListName, addListError);
   };
 
   todoLists.addEventListener("change", () => displayTodos(getListToRender()));

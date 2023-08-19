@@ -15,22 +15,8 @@ body {
   height: 100vh;
   color: #d6d6d6;
   display: grid;
-  grid-template: 100px auto / 1fr 5fr;
-  grid-template-areas:
-    "heading heading"
-    "sidebar todos";
-}
-
-.todo-form select,
-.todo-form option,
-.todo-form input {
-  box-sizing: border-box;
-  width: 100%;
-  height: 25px;
-  padding: 2px 10px;
-  outline: none;
-  border: none;
-  border-radius: 5px;
+  grid-template: auto / 325px auto;
+  grid-template-areas: "sidebar todos";
 }
 
 dialog {
@@ -76,21 +62,6 @@ dialog::backdrop {
   border-radius: 8px;
 }
 
-.todo-form__button {
-  height: 30px;
-  padding: 5px;
-  background-color: #1d1d1d;
-  color: #d6d6d6;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.todo-form__button:active {
-  transform: scale(1.02);
-}
-
 input[type="checkbox"] {
   width: 22px;
   height: 22px;
@@ -99,7 +70,6 @@ input[type="checkbox"] {
 }
 
 .heading {
-  grid-area: heading;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -114,29 +84,16 @@ input[type="checkbox"] {
   height: auto;
 }
 
-.todo-form {
-  grid-area: sidebar;
-  background-color: #303030;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  padding: 20px;
-}
-
-.select-list,
-.create-todo,
-.create-list,
-.delete-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.title {
+  white-space: nowrap;
 }
 
 .todo-lists,
 .create-todo__description,
 .create-todo__due-date,
-.create-todo__importance,
+.create-todo__priority,
 .list-name {
+  position: relative;
   display: flex;
   gap: 10px;
   align-items: center;
@@ -149,6 +106,8 @@ input[type="checkbox"] {
   flex-direction: column;
   gap: 15px;
   margin: 25px;
+  width: min(50vw, 1200px);
+  justify-self: center;
 }
 
 .todo {
@@ -214,16 +173,156 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.error {
-  border: solid 3px red;
+input.error {
+  outline: solid 3px red;
 }
 
-.error::placeholder {
-  color: rgba(255, 0, 0, 0.527);
-}
-
-.mobile-menu {
+.description-error-message,
+.add-list-error-message {
   display: none;
+}
+
+.description-error-message.error,
+.add-list-error-message.error {
+  display: block;
+  position: absolute;
+  bottom: -9px;
+  left: 6px;
+  font-size: 0.7rem;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  margin: 0;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #303030;
+  padding-bottom: 10px;
+}
+.menu__button {
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: #303030;
+  cursor: pointer;
+}
+
+.menu__icon {
+  width: 20px;
+  height: auto;
+}
+
+.menu__icon.selected {
+  filter: invert(30%) sepia(80%) saturate(774%) hue-rotate(354deg)
+    brightness(102%) contrast(98%);
+}
+
+.todo-form {
+  grid-area: sidebar;
+  background-color: #303030;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  height: auto;
+}
+
+.todo-form select,
+.todo-form option,
+.todo-form input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 10px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.todo-form__button {
+  height: 30px;
+  padding: 5px;
+  background-color: #1d1d1d;
+  color: #d6d6d6;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.todo-form__button:active {
+  transform: scale(1.02);
+}
+
+.form-heading {
+  padding-top: 15px;
+}
+
+.select-list,
+.create-todo,
+.create-list,
+.delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  opacity: 0;
+  height: 0;
+}
+
+.create-todo {
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.create-todo.selected {
+  opacity: 100%;
+  padding: 5px 20px 15px 20px;
+  height: auto;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.select-list {
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.select-list.selected {
+  opacity: 100%;
+  height: auto;
+  padding: 0 20px 15px 20px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.create-list {
+  overflow: hidden;
+  display: flex;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.create-list.selected {
+  opacity: 100%;
+  padding: 5px 20px 15px 20px;
+  height: auto;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.delete-list {
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.delete-list.selected {
+  opacity: 100%;
+  padding: 0 20px 15px 20px;
+  height: auto;
+  transition: opacity 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 800px) {
@@ -256,7 +355,7 @@ input[type="checkbox"] {
     display: grid;
     grid-template-areas:
       "description description"
-      "date importance"
+      "date priority"
       "button button";
     gap: 15px;
     transition: height 0.2s ease-in-out;
@@ -264,8 +363,8 @@ input[type="checkbox"] {
 
   .create-todo.selected {
     opacity: 100%;
-    padding: 0 20px 15px 20px;
-    height: 110px;
+    padding: 5px 20px 15px 20px;
+    height: 140px;
     transition-property: height, opacity;
     transition-duration: 0.2s, 0.8s;
     transition-timing-function: ease-in-out;
@@ -280,8 +379,8 @@ input[type="checkbox"] {
     grid-area: date;
   }
 
-  .create-todo__importance {
-    grid-area: importance;
+  .create-todo__priority {
+    grid-area: priority;
   }
 
   .todo-add {
@@ -297,16 +396,12 @@ input[type="checkbox"] {
 
   .select-list.selected {
     opacity: 100%;
-    height: 25px;
+    height: 45px;
     padding: 0 20px 15px 20px;
     transition-property: height, opacity;
     transition-duration: 0.2s, 0.8s;
     transition-timing-function: ease-in-out;
     transition-delay: 0, 0.3s;
-  }
-
-  .todo-lists > label {
-    display: none;
   }
 
   .create-list {
@@ -320,8 +415,8 @@ input[type="checkbox"] {
 
   .create-list.selected {
     opacity: 100%;
-    padding: 0 20px 15px 20px;
-    height: 67px;
+    padding: 5px 20px 15px 20px;
+    height: 87px;
     transition-property: height, opacity;
     transition-duration: 0.2s, 0.8s;
     transition-timing-function: ease-in-out;
@@ -348,6 +443,7 @@ input[type="checkbox"] {
   }
 
   .todo-list {
+    width: auto;
     margin: 25px;
   }
 
@@ -397,14 +493,14 @@ input[type="checkbox"] {
     max-width: 350px;
   }
 
-  .mobile-menu {
+  .menu {
     display: flex;
     align-items: center;
     justify-content: space-around;
     background-color: #303030;
     padding-bottom: 10px;
   }
-  .mobile-menu__button {
+  .menu__button {
     width: fit-content;
     height: fit-content;
     margin: 0;
@@ -414,12 +510,12 @@ input[type="checkbox"] {
     background-color: #303030;
   }
 
-  .mobile-menu__icon {
+  .menu__icon {
     width: 20px;
     height: auto;
   }
 
-  .mobile-menu__icon.selected {
+  .menu__icon.selected {
     filter: invert(30%) sepia(80%) saturate(774%) hue-rotate(354deg)
       brightness(102%) contrast(98%);
   }

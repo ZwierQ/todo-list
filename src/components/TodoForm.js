@@ -1,15 +1,18 @@
 import { getMinDate } from "../libs/getMinDate";
+import Heading from "./Heading";
+import Menu from "./Menu";
 
 const TodoForm = (parentElement) => {
   const todoForm = document.createElement("div");
-
   todoForm.classList.add("todo-form");
 
-  todoForm.innerHTML = `
+  Heading(todoForm);
+  Menu(todoForm);
+
+  todoForm.innerHTML += `
     <div class="select-list tab-select-list">
       <h2 class="form-heading">Select List</h2>
       <div class="todo-lists">
-        <label for="todo-lists">List Name</label>
         <select name="todo-projects" id="todo-lists">
         </select>
       </div>
@@ -18,14 +21,15 @@ const TodoForm = (parentElement) => {
       <h2 class="form-heading">Create New To-Do</h2>
       <div class="create-todo__description">
         <input type="text" id="todo-description" placeholder="Task Description">
+        <p class="description-error-message">Please Add Description</p>
       </div>
       <div class="create-todo__due-date">
         <label for="todo-due-date">Due Date</label>
         <input type="date" id="todo-due-date" value=${getMinDate()} min=${getMinDate()}>
       </div>
-      <div class="create-todo__importance">
-        <label for="todo-importance">Importance</label>
-        <select name="todo-importance" id="todo-importance">
+      <div class="create-todo__priority">
+        <label for="todo-priority">Priority</label>
+        <select name="todo-priority" id="todo-priority">
           <option value="low">Low</option>
           <option value="medium">Medium</option>
           <option value="high">High</option>
@@ -37,6 +41,7 @@ const TodoForm = (parentElement) => {
       <h2 class="form-heading">Create New List</h2>
       <div class="list-name">
         <input type="text" id="create-list" placeholder="List Name">
+        <p class="add-list-error-message"></p>
       </div>
       <button class="add-list todo-form__button" type="button">Create List</button>
     </div>

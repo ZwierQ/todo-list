@@ -41,8 +41,8 @@ const TodosController = () => {
     // getTodos if array is not empty
     listIndex !== -1 && todosLists[listIndex].todos;
 
-  const addTodo = (listIndex, description, importance, dueDate) => {
-    const todo = new Todo(description, importance, dueDate);
+  const addTodo = (listIndex, description, priority, dueDate) => {
+    const todo = new Todo(description, priority, dueDate);
     todosLists[listIndex].todos.push(todo);
     storeList();
   };
