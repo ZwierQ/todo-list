@@ -8,26 +8,23 @@ const ScreenController = () => {
   const todoDescription = document.getElementById("todo-description");
   const todoDueDate = document.getElementById("todo-due-date");
   const todoPriority = document.getElementById("todo-priority");
-  const addTodoButton = document.querySelector("[data-add-todo]");
   const todoList = document.querySelector("[data-todo-list]");
   const todoLists = document.getElementById("todo-lists");
   const descriptionError = document.querySelector("[data-description-error]");
-  const addListButton = document.querySelector("[data-add-list]");
   const addListError = document.querySelector("[data-add-list-error]");
-  const deleteListButton = document.querySelector("[data-list-delete]");
   const newListName = document.getElementById("create-list");
   const modal = document.getElementById("modal");
-  const confirmListDelete = document.querySelector("[data-confirm]");
-  const cancelListDelete = document.querySelector("[data-cancel]");
   const tabButtons = document.querySelectorAll("[data-menu-button]");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
+  const getElements = () => [todoList, todoLists, tabButtons];
 
   const formatDate = (date) =>
     date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3-$2-$1");
 
-  const displayTodos = (list) => {
+  const displayTodos = () => {
+    const list = getListToRender();
     todoList.innerHTML = `<h1>${
       todosController.getList()[getCurrentList()].name
     }</h1>`;
@@ -37,8 +34,8 @@ const ScreenController = () => {
 
     list.forEach((todo, index) => {
       todoList.innerHTML += `
-      <div class="todo ${todo.importance}${
-        todo.state ? " checked" : ""
+      <div class="todo ${todo.importance} ${
+        todo.state ? "checked" : ""
       }" id="${index}">
         <div class="todo__description">${todo.description}</div>
         <div class="todo__info">
@@ -47,24 +44,23 @@ const ScreenController = () => {
             todo.state ? "checked" : ""
           }>
           <button type="button" class="todo__delete-button">
-          <img src=${closeIcon} class="close-icon">
+            <img src=${closeIcon} class="close-icon">
           </button>
-          </div>
+        </div>
       </div>
       `;
     });
   };
 
-  const deleteList = () => {
-    modal.close();
-    todosController.deleteList(getCurrentList());
-    renderListsOptions();
-    displayTodos(getListToRender());
-  };
-
   const addError = (borderToChange, errorMessage) => {
     borderToChange.classList.add("error");
     errorMessage.classList.add("error");
+  };
+
+  const removeError = (...args) => {
+    const displayedErrors = [...args];
+
+    displayedErrors.forEach((error) => error.classList.remove("error"));
   };
 
   const renderListsOptions = () => {
@@ -74,9 +70,23 @@ const ScreenController = () => {
 
     todosLists.forEach((list) => {
       todoLists.innerHTML += `
-      <option value="${list.name}">${list.name}</option>
+        <option value="${list.name}">${list.name}</option>
       `;
     });
+  };
+
+  const initialRender = () => {
+    renderListsOptions();
+    displayTodos();
+  };
+
+  const displayModal = () => modal.showModal();
+
+  const closeModal = () => modal.close();
+
+  const resetValues = (inputField, errorMessage) => {
+    inputField.value = "";
+    removeError(inputField, errorMessage);
   };
 
   const addList = () => {
@@ -106,14 +116,14 @@ const ScreenController = () => {
     renderListsOptions();
     todoLists.selectedIndex = newListIndex;
     displayTodos(getListToRender());
-    newListName.value = "";
-    removeError(newListName, addListError);
+    resetValues(newListName, addListError);
   };
 
-  const removeError = (...args) => {
-    const displayedErrors = [...args];
-
-    displayedErrors.forEach((error) => error.classList.remove("error"));
+  const deleteList = () => {
+    closeModal();
+    todosController.deleteList(getCurrentList());
+    renderListsOptions();
+    displayTodos();
   };
 
   const addTodo = () => {
@@ -129,11 +139,11 @@ const ScreenController = () => {
       todoPriority.value,
       todoDueDate.value
     );
-    displayTodos(getListToRender());
-    todoDescription.value = "";
+
+    displayTodos();
     todoDueDate.value = getMinDate();
     todoPriority.selectedIndex = 0;
-    removeError(todoDescription, descriptionError);
+    resetValues(todoDescription, descriptionError);
   };
 
   const deleteTodo = (event) => {
@@ -142,7 +152,7 @@ const ScreenController = () => {
       const selectedTodoID = event.target.closest(".todo").id;
 
       todosController.deleteTodo(getCurrentList(), selectedTodoID);
-      displayTodos(getListToRender());
+      displayTodos();
     }
   };
 
@@ -152,7 +162,7 @@ const ScreenController = () => {
       const todo = event.target.closest(".todo").id;
 
       todosController.changeTodoState(getCurrentList(), todo);
-      displayTodos(getListToRender());
+      displayTodos();
     }
   };
 
@@ -181,23 +191,19 @@ const ScreenController = () => {
     removeError(todoDescription, descriptionError, newListName, addListError);
   };
 
-  todoLists.addEventListener("change", () => displayTodos(getListToRender()));
-  addTodoButton.addEventListener("click", () => addTodo());
-  todoList.addEventListener("click", (event) => {
-    deleteTodo(event), changeTodoState(event);
-  });
-  addListButton.addEventListener("click", () => addList());
-  deleteListButton.addEventListener("click", () => modal.showModal());
-  confirmListDelete.addEventListener("click", () => deleteList());
-  cancelListDelete.addEventListener("click", () => modal.close());
-  tabButtons.forEach((button) => {
-    button.addEventListener("click", (event) => selectTab(event));
-  });
-
-  // Initial Lists Options selector render
-  renderListsOptions();
-  // Initial Todos render
-  displayTodos(getListToRender());
+  return {
+    initialRender,
+    displayTodos,
+    addTodo,
+    deleteTodo,
+    changeTodoState,
+    addList,
+    deleteList,
+    selectTab,
+    displayModal,
+    closeModal,
+    getElements,
+  };
 };
 
 export default ScreenController;

@@ -1,6 +1,6 @@
-import "./index.css";
 import UI from "./components/UI";
-import ScreenController from "./libs/ScreenController";
+import "./index.css";
+import EventsController from "./libs/EventsController";
 
 UI();
-ScreenController();
+EventsController();
