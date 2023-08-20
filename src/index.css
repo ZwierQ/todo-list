@@ -1,5 +1,4 @@
 body,
-input,
 h1,
 h2 {
   padding: 0;
@@ -88,11 +87,7 @@ input[type="checkbox"] {
   white-space: nowrap;
 }
 
-.todo-lists,
-.create-todo__description,
-.create-todo__due-date,
-.create-todo__priority,
-.list-name {
+.todo-form__input-container {
   position: relative;
   display: flex;
   gap: 10px;
@@ -128,9 +123,11 @@ input[type="checkbox"] {
 }
 
 .todo__delete-button {
+  height: 25px;
   background-color: inherit;
   border: none;
   outline: none;
+  padding: 0;
 }
 
 .todo__description {
@@ -180,6 +177,7 @@ input[type="checkbox"] {
   background-color: #303030;
   padding-bottom: 10px;
 }
+
 .menu__button {
   width: fit-content;
   height: fit-content;
@@ -192,7 +190,7 @@ input[type="checkbox"] {
 }
 
 .menu__icon {
-  width: 20px;
+  width: 25px;
   height: auto;
 }
 
@@ -206,21 +204,21 @@ input[type="checkbox"] {
   background-color: #303030;
   display: flex;
   flex-direction: column;
-  gap: 0;
   margin: 0;
   padding: 0;
-  height: auto;
 }
 
-.todo-form select,
-.todo-form option,
-.todo-form input {
+.todo-form__input {
   box-sizing: border-box;
   width: 100%;
   padding: 12px 10px;
   outline: none;
   border: none;
   border-radius: 5px;
+}
+
+input[type="date"] {
+  width: auto;
 }
 
 .todo-form__button {
@@ -249,12 +247,9 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   gap: 25px;
+  overflow: hidden;
   opacity: 0;
   height: 0;
-}
-
-.create-todo {
-  overflow: hidden;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -265,21 +260,10 @@ input[type="checkbox"] {
   transition: opacity 0.3s ease-in-out;
 }
 
-.select-list {
-  overflow: hidden;
-  transition: opacity 0.3s ease-in-out;
-}
-
 .select-list.selected {
   opacity: 100%;
   height: auto;
   padding: 0 20px 15px 20px;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.create-list {
-  overflow: hidden;
-  display: flex;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -290,11 +274,6 @@ input[type="checkbox"] {
   transition: opacity 0.3s ease-in-out;
 }
 
-.delete-list {
-  overflow: hidden;
-  transition: opacity 0.3s ease-in-out;
-}
-
 .delete-list.selected {
   opacity: 100%;
   padding: 0 20px 15px 20px;
@@ -302,17 +281,15 @@ input[type="checkbox"] {
   transition: opacity 0.3s ease-in-out;
 }
 
-input.error {
+.todo-form__input.error {
   outline: solid 3px red;
 }
 
-.description-error-message,
-.add-list-error-message {
+.error-message {
   display: none;
 }
 
-.description-error-message.error,
-.add-list-error-message.error {
+.error-message.error {
   display: block;
   position: absolute;
   bottom: -9px;
@@ -341,17 +318,7 @@ input.error {
     height: auto;
   }
 
-  .todo-form {
-    margin: 0;
-    padding: 0;
-    height: auto;
-    gap: 0;
-  }
-
   .create-todo {
-    opacity: 0;
-    height: 0px;
-    overflow: hidden;
     display: grid;
     grid-template-areas:
       "description description"
@@ -362,13 +329,7 @@ input.error {
   }
 
   .create-todo.selected {
-    opacity: 100%;
-    padding: 5px 20px 15px 20px;
     height: 140px;
-    transition-property: height, opacity;
-    transition-duration: 0.2s, 0.8s;
-    transition-timing-function: ease-in-out;
-    transition-delay: 0, 0.3s;
   }
 
   .create-todo__description {
@@ -383,59 +344,38 @@ input.error {
     grid-area: priority;
   }
 
-  .todo-add {
+  .create-todo > .todo-form__button {
     grid-area: button;
   }
 
   .select-list {
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
     transition: height 0.2s ease-in-out;
   }
 
   .select-list.selected {
-    opacity: 100%;
     height: 45px;
-    padding: 0 20px 15px 20px;
-    transition-property: height, opacity;
-    transition-duration: 0.2s, 0.8s;
-    transition-timing-function: ease-in-out;
-    transition-delay: 0, 0.3s;
   }
 
   .create-list {
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
-    display: flex;
     gap: 12px;
     transition: height 0.2s ease-in-out;
   }
 
   .create-list.selected {
-    opacity: 100%;
-    padding: 5px 20px 15px 20px;
     height: 87px;
-    transition-property: height, opacity;
-    transition-duration: 0.2s, 0.8s;
-    transition-timing-function: ease-in-out;
-    transition-delay: 0, 0.3s;
   }
 
   .delete-list {
-    opacity: 0%;
-    height: 0;
-    overflow: hidden;
-    display: flex;
     transition: height 0.2s ease-in-out;
   }
 
   .delete-list.selected {
-    opacity: 100%;
-    padding: 0 20px 15px 20px;
     height: 30px;
-    gap: 0;
+  }
+
+  .todo-form > *.selected {
+    opacity: 100%;
+    padding: 8px 20px 15px 20px;
     transition-property: height, opacity;
     transition-duration: 0.2s, 0.8s;
     transition-timing-function: ease-in-out;
@@ -493,30 +433,12 @@ input.error {
     max-width: 350px;
   }
 
-  .menu {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: #303030;
-    padding-bottom: 10px;
-  }
-  .menu__button {
-    width: fit-content;
-    height: fit-content;
-    margin: 0;
-    padding: 0;
-    border: none;
-    outline: none;
-    background-color: #303030;
-  }
-
   .menu__icon {
     width: 20px;
     height: auto;
   }
 
-  .menu__icon.selected {
-    filter: invert(30%) sepia(80%) saturate(774%) hue-rotate(354deg)
-      brightness(102%) contrast(98%);
+  input[type="date"] {
+    width: 100%;
   }
 }

@@ -8,16 +8,16 @@ const Menu = (parentElement) => {
   mobileMenu.classList.add("menu");
 
   mobileMenu.innerHTML = `
-    <button type="button" class="tab-add-todo menu__button">
+    <button type="button" class="tab-add-todo menu__button" data-menu-button>
       <img src=${addTodoIcon} class="tab-add-todo menu__icon">
     </button>
-    <button type="button" class="tab-select-list menu__button">
+    <button type="button" class="tab-select-list menu__button" data-menu-button>
       <img src=${selectListIcon} class="tab-select-list menu__icon">
     </button>
-    <button type="button" class="tab-add-list menu__button">
+    <button type="button" class="tab-add-list menu__button" data-menu-button>
       <img src=${addListIcon} class="tab-add-list menu__icon">
     </button>
-    <button type="button" class="tab-delete-list menu__button">
+    <button type="button" class="tab-delete-list menu__button" data-menu-button>
       <img src=${deleteListIcon} class="tab-delete-list menu__icon">
     </button>
   `;

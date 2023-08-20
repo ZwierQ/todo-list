@@ -3,7 +3,7 @@ const TodoList = (parentElement) => {
   todoList.classList.add("todo-container");
 
   todoList.innerHTML = `
-      <div class="todo-list"></div>
+      <div class="todo-list" data-todo-list></div>
   `;
 
   parentElement.appendChild(todoList);

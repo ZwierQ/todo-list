@@ -7,8 +7,8 @@ const Modal = (parentElement) => {
       Are you sure you want to delete current list?
     </div>
     <div class="modal__buttons">
-      <button type="button" class="modal__button confirm">Confirm</button>
-      <button type="button" class="modal__button cancel">Cancel</button>
+      <button type="button" class="modal__button" data-confirm>Confirm</button>
+      <button type="button" class="modal__button" data-cancel>Cancel</button>
     </div>
   `;
 

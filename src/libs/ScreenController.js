@@ -8,18 +8,18 @@ const ScreenController = () => {
   const todoDescription = document.getElementById("todo-description");
   const todoDueDate = document.getElementById("todo-due-date");
   const todoPriority = document.getElementById("todo-priority");
-  const addTodoButton = document.querySelector(".todo-add");
-  const todoList = document.querySelector(".todo-list");
+  const addTodoButton = document.querySelector("[data-add-todo]");
+  const todoList = document.querySelector("[data-todo-list]");
   const todoLists = document.getElementById("todo-lists");
-  const descriptionError = document.querySelector(".description-error-message");
-  const addListButton = document.querySelector(".add-list");
-  const addListError = document.querySelector(".add-list-error-message");
-  const deleteListButton = document.querySelector(".list-delete");
+  const descriptionError = document.querySelector("[data-description-error]");
+  const addListButton = document.querySelector("[data-add-list]");
+  const addListError = document.querySelector("[data-add-list-error]");
+  const deleteListButton = document.querySelector("[data-list-delete]");
   const newListName = document.getElementById("create-list");
   const modal = document.getElementById("modal");
-  const confirmListDelete = document.querySelector(".confirm");
-  const cancelListDelete = document.querySelector(".cancel");
-  const tabButtons = document.querySelectorAll(".menu__button");
+  const confirmListDelete = document.querySelector("[data-confirm]");
+  const cancelListDelete = document.querySelector("[data-cancel]");
+  const tabButtons = document.querySelectorAll("[data-menu-button]");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
