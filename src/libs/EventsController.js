@@ -15,20 +15,27 @@ const EventsController = () => {
   window.addEventListener("load", () => screenController.initialRender());
 
   todoLists.addEventListener("change", () => screenController.displayTodos());
+
   addTodoButton.addEventListener("click", () => screenController.addTodo());
+
   todoList.addEventListener("click", (event) => {
     screenController.deleteTodo(event), screenController.changeTodoState(event);
   });
+
   addListButton.addEventListener("click", () => screenController.addList());
+
   deleteListButton.addEventListener("click", () =>
     screenController.displayModal()
   );
+
   confirmListDelete.addEventListener("click", () =>
     screenController.deleteList()
   );
+
   cancelListDelete.addEventListener("click", () =>
     screenController.closeModal()
   );
+
   tabButtons.forEach((button) => {
     button.addEventListener("click", (event) =>
       screenController.selectTab(event)

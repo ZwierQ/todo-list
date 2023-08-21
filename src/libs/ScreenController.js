@@ -70,7 +70,7 @@ const ScreenController = () => {
 
     todosLists.forEach((list) => {
       todoLists.innerHTML += `
-        <option value="${list.name}">${list.name}</option>
+      <option value="${list.name}">${list.name}</option>
       `;
     });
   };
@@ -89,6 +89,28 @@ const ScreenController = () => {
     removeError(inputField, errorMessage);
   };
 
+  const displayNewList = (listName, listIndex) => {
+    todosController.addList(listName);
+    renderListsOptions();
+    todoLists.selectedIndex = listIndex;
+    displayTodos();
+    resetValues(newListName, addListError);
+  };
+
+  const displayNewTodo = () => {
+    todosController.addTodo(
+      getCurrentList(),
+      todoDescription.value,
+      todoPriority.value,
+      todoDueDate.value
+    );
+
+    displayTodos();
+    todoDueDate.value = getMinDate();
+    todoPriority.selectedIndex = 0;
+    resetValues(todoDescription, descriptionError);
+  };
+
   const addList = () => {
     const newListNameValue = newListName.value;
     const existingLists = todosController.getList();
@@ -98,6 +120,7 @@ const ScreenController = () => {
     if (newListNameValue === "") {
       addError(newListName, addListError);
       addListError.innerHTML = "Please Name Your List";
+
       return;
     }
 
@@ -109,14 +132,11 @@ const ScreenController = () => {
       addListError.innerHTML = "This List Name Already Exists";
 
       newListName.value = "";
+
       return;
     }
 
-    todosController.addList(newListNameValue);
-    renderListsOptions();
-    todoLists.selectedIndex = newListIndex;
-    displayTodos(getListToRender());
-    resetValues(newListName, addListError);
+    displayNewList(newListNameValue, newListIndex);
   };
 
   const deleteList = () => {
@@ -133,21 +153,11 @@ const ScreenController = () => {
       return;
     }
 
-    todosController.addTodo(
-      getCurrentList(),
-      todoDescription.value,
-      todoPriority.value,
-      todoDueDate.value
-    );
-
-    displayTodos();
-    todoDueDate.value = getMinDate();
-    todoPriority.selectedIndex = 0;
-    resetValues(todoDescription, descriptionError);
+    displayNewTodo();
   };
 
   const deleteTodo = (event) => {
-    // deletes todo if we click close icon
+    // deletes todo on "close-icon" click
     if (event.target.classList.contains("close-icon")) {
       const selectedTodoID = event.target.closest(".todo").id;
 
@@ -157,7 +167,7 @@ const ScreenController = () => {
   };
 
   const changeTodoState = (event) => {
-    // change status if we click checkbox
+    // change status on checkbox click
     if (event.target.classList.contains("todo__status")) {
       const todo = event.target.closest(".todo").id;
 
@@ -172,7 +182,7 @@ const ScreenController = () => {
 
     tabElements.forEach((item) => {
       const itemClasses = item.classList;
-      // "selected" class toggle clicked tab
+      // clicked tab "selected" class toggle
       itemClasses.contains("selected")
         ? itemClasses.remove("selected")
         : itemClasses.add("selected");
