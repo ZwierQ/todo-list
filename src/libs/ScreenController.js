@@ -14,11 +14,11 @@ const ScreenController = () => {
   const addListError = document.querySelector("[data-add-list-error]");
   const newListName = document.getElementById("create-list");
   const modal = document.getElementById("modal");
-  const tabButtons = document.querySelectorAll("[data-menu-button]");
 
   const getCurrentList = () => todoLists.selectedIndex;
   const getListToRender = () => todosController.getTodos(getCurrentList());
-  const getElements = () => [todoList, todoLists, tabButtons];
+  const getNewListNameValue = () => newListName.value;
+  const getTodoDescription = () => todoDescription.value;
 
   const formatDate = (date) =>
     date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3-$2-$1");
@@ -63,6 +63,26 @@ const ScreenController = () => {
     displayedErrors.forEach((error) => error.classList.remove("error"));
   };
 
+  const resetErrors = () =>
+    removeError(todoDescription, descriptionError, newListName, addListError);
+
+  const emptyListNameError = () => {
+    addError(newListName, addListError);
+    addListError.innerHTML = "Please Name Your List";
+  };
+
+  const invalidListNameError = () => {
+    addError(newListName, addListError);
+    addListError.innerHTML = "There Is A List With That Name";
+
+    newListName.value = "";
+  };
+
+  const todoNameError = () => {
+    addError(todoDescription, descriptionError);
+    return;
+  };
+
   const renderListsOptions = () => {
     const todosLists = todosController.getList();
 
@@ -97,6 +117,12 @@ const ScreenController = () => {
     resetValues(newListName, addListError);
   };
 
+  const rerenderList = () => {
+    todosController.deleteList(getCurrentList());
+    renderListsOptions();
+    displayTodos();
+  };
+
   const displayNewTodo = () => {
     todosController.addTodo(
       getCurrentList(),
@@ -111,108 +137,33 @@ const ScreenController = () => {
     resetValues(todoDescription, descriptionError);
   };
 
-  const addList = () => {
-    const newListNameValue = newListName.value;
-    const existingLists = todosController.getList();
-    const newListIndex = existingLists.length;
-
-    // If new list name is empty return without adding list
-    if (newListNameValue === "") {
-      addError(newListName, addListError);
-      addListError.innerHTML = "Please Name Your List";
-
-      return;
-    }
-
-    // If new list name is not unique return without adding list
-    if (
-      existingLists.findIndex((list) => list.name === newListNameValue) !== -1
-    ) {
-      addError(newListName, addListError);
-      addListError.innerHTML = "This List Name Already Exists";
-
-      newListName.value = "";
-
-      return;
-    }
-
-    displayNewList(newListNameValue, newListIndex);
-  };
-
-  const deleteList = () => {
-    closeModal();
-    todosController.deleteList(getCurrentList());
-    renderListsOptions();
+  const removeDisplayedTodo = (todoID) => {
+    todosController.deleteTodo(getCurrentList(), todoID);
     displayTodos();
   };
 
-  const addTodo = () => {
-    // If todos description or due date are empty return without adding todo
-    if (todoDescription.value === "") {
-      addError(todoDescription, descriptionError);
-      return;
-    }
-
-    displayNewTodo();
-  };
-
-  const deleteTodo = (event) => {
-    // deletes todo on "close-icon" click
-    if (event.target.classList.contains("close-icon")) {
-      const selectedTodoID = event.target.closest(".todo").id;
-
-      todosController.deleteTodo(getCurrentList(), selectedTodoID);
-      displayTodos();
-    }
-  };
-
-  const changeTodoState = (event) => {
-    // change status on checkbox click
-    if (event.target.classList.contains("todo__status")) {
-      const todo = event.target.closest(".todo").id;
-
-      todosController.changeTodoState(getCurrentList(), todo);
-      displayTodos();
-    }
-  };
-
-  const selectTab = (event) => {
-    const selectedTab = event.target.classList[0];
-    const tabElements = document.querySelectorAll(`.${selectedTab}`);
-
-    tabElements.forEach((item) => {
-      const itemClasses = item.classList;
-      // clicked tab "selected" class toggle
-      itemClasses.contains("selected")
-        ? itemClasses.remove("selected")
-        : itemClasses.add("selected");
-    });
-
-    tabButtons.forEach((button) => {
-      const buttonClass = button.classList[0];
-      // Removing "selected" class from other tabs
-      if (buttonClass !== selectedTab) {
-        const otherButtons = document.querySelectorAll(`.${buttonClass}`);
-
-        otherButtons.forEach((item) => item.classList.remove("selected"));
-      }
-    });
-
-    removeError(todoDescription, descriptionError, newListName, addListError);
+  const changeTodoState = (todo) => {
+    todosController.changeTodoState(getCurrentList(), todo);
+    displayTodos();
   };
 
   return {
     initialRender,
     displayTodos,
-    addTodo,
-    deleteTodo,
-    changeTodoState,
-    addList,
-    deleteList,
-    selectTab,
     displayModal,
     closeModal,
-    getElements,
+    emptyListNameError,
+    invalidListNameError,
+    todoNameError,
+    rerenderList,
+    resetErrors,
+    displayNewList,
+    displayNewTodo,
+    removeDisplayedTodo,
+    getNewListNameValue,
+    changeTodoState,
+    getTodoDescription,
+    getList: todosController.getList,
   };
 };
 
