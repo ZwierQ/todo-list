@@ -71,24 +71,7 @@ const EventsController = () => {
     const selectedTab = event.target.classList[0];
     const tabElements = document.querySelectorAll(`.${selectedTab}`);
 
-    tabElements.forEach((item) => {
-      const itemClasses = item.classList;
-      // clicked tab "selected" class toggle
-      itemClasses.contains("selected")
-        ? itemClasses.remove("selected")
-        : itemClasses.add("selected");
-    });
-
-    tabButtons.forEach((button) => {
-      const buttonClass = button.classList[0];
-      // Removing "selected" class from other tabs
-      if (buttonClass !== selectedTab) {
-        const otherButtons = document.querySelectorAll(`.${buttonClass}`);
-
-        otherButtons.forEach((item) => item.classList.remove("selected"));
-      }
-    });
-
+    screenController.selectTab(tabElements, tabButtons, selectedTab);
     screenController.resetErrors();
   };
 

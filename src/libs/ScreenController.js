@@ -80,7 +80,6 @@ const ScreenController = () => {
 
   const todoNameError = () => {
     addError(todoDescription, descriptionError);
-    return;
   };
 
   const renderListsOptions = () => {
@@ -147,6 +146,26 @@ const ScreenController = () => {
     displayTodos();
   };
 
+  const selectTab = (tabs, buttons, selectedTab) => {
+    tabs.forEach((item) => {
+      const itemClasses = item.classList;
+      // toggle "selected" class on given tab
+      itemClasses.contains("selected")
+        ? itemClasses.remove("selected")
+        : itemClasses.add("selected");
+    });
+
+    // Removing "selected" class from other tabs buttons
+    buttons.forEach((button) => {
+      const buttonClass = button.classList[0];
+      const otherButtons = document.querySelectorAll(`.${buttonClass}`);
+
+      if (buttonClass === selectedTab) return;
+
+      otherButtons.forEach((item) => item.classList.remove("selected"));
+    });
+  };
+
   return {
     initialRender,
     displayTodos,
@@ -163,6 +182,7 @@ const ScreenController = () => {
     getNewListNameValue,
     changeTodoState,
     getTodoDescription,
+    selectTab,
     getList: todosController.getList,
   };
 };
