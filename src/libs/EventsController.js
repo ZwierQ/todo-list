@@ -72,7 +72,7 @@ const EventsController = () => {
     const tabElements = document.querySelectorAll(`.${selectedTab}`);
 
     screenController.selectTab(tabElements, tabButtons, selectedTab);
-    screenController.resetErrors();
+    screenController.removeErrors();
   };
 
   // Initial render on page load

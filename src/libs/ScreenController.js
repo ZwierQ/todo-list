@@ -1,4 +1,4 @@
-import closeIcon from "../images/close-one.svg";
+import Todo from "../components/Todo";
 import TodosController from "../libs/TodosController";
 import { getMinDate } from "./getMinDate";
 
@@ -20,66 +20,50 @@ const ScreenController = () => {
   const getNewListNameValue = () => newListName.value;
   const getTodoDescription = () => todoDescription.value;
 
-  const formatDate = (date) =>
-    date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3-$2-$1");
-
   const displayTodos = () => {
     const list = getListToRender();
-    todoList.innerHTML = `<h1>${
-      todosController.getList()[getCurrentList()].name
-    }</h1>`;
+    const listTitle = todosController.getList()[getCurrentList()].name;
+
+    todoList.innerHTML = `<h1>${listTitle}</h1>`;
 
     // If list array is empty return without render todos
     if (getCurrentList() === -1) return;
 
     list.forEach((todo, index) => {
-      todoList.innerHTML += `
-      <div class="todo ${todo.importance} ${
-        todo.state ? "checked" : ""
-      }" id="${index}">
-        <div class="todo__description">${todo.description}</div>
-        <div class="todo__info">
-          <div class="todo__date">${formatDate(todo.dueDate)}</div>
-          <input type="checkbox" class="todo__status" name="status" value="done" ${
-            todo.state ? "checked" : ""
-          }>
-          <button type="button" class="todo__delete-button">
-            <img src=${closeIcon} class="close-icon">
-          </button>
-        </div>
-      </div>
-      `;
+      todoList.innerHTML += Todo(todo, index);
     });
   };
 
-  const addError = (borderToChange, errorMessage) => {
+  const addErrors = (borderToChange, errorMessage) => {
     borderToChange.classList.add("error");
     errorMessage.classList.add("error");
   };
 
-  const removeError = (...args) => {
-    const displayedErrors = [...args];
+  const removeErrors = () => {
+    const displayedErrors = [
+      todoDescription,
+      descriptionError,
+      newListName,
+      addListError,
+    ];
 
     displayedErrors.forEach((error) => error.classList.remove("error"));
   };
 
-  const resetErrors = () =>
-    removeError(todoDescription, descriptionError, newListName, addListError);
-
   const emptyListNameError = () => {
-    addError(newListName, addListError);
+    addErrors(newListName, addListError);
     addListError.innerHTML = "Please Name Your List";
   };
 
   const invalidListNameError = () => {
-    addError(newListName, addListError);
+    addErrors(newListName, addListError);
     addListError.innerHTML = "There Is A List With That Name";
 
     newListName.value = "";
   };
 
   const todoNameError = () => {
-    addError(todoDescription, descriptionError);
+    addErrors(todoDescription, descriptionError);
   };
 
   const renderListsOptions = () => {
@@ -105,7 +89,7 @@ const ScreenController = () => {
 
   const resetValues = (inputField, errorMessage) => {
     inputField.value = "";
-    removeError(inputField, errorMessage);
+    removeErrors(inputField, errorMessage);
   };
 
   const displayNewList = (listName, listIndex) => {
@@ -175,7 +159,7 @@ const ScreenController = () => {
     invalidListNameError,
     todoNameError,
     rerenderList,
-    resetErrors,
+    removeErrors,
     displayNewList,
     displayNewTodo,
     removeDisplayedTodo,
